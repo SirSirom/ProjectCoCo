@@ -8,7 +8,8 @@ plugins {
 android {
     namespace = "com.example.project_coco"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    //required by google_sign_in_android package
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
