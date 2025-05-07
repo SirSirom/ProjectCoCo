@@ -7,38 +7,77 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+    return MaterialApp( //ganze App
+      theme: ThemeData(scaffoldBackgroundColor: Colors.brown),
+      home: Scaffold( //scaffold für die App
+        body: Center( //body für die App
+          child: Column( //basically ist die ganze Page eine einspaltige Tabelle
+            mainAxisAlignment: MainAxisAlignment.center, //eine zentriete tabelle
             children: [
-              // Centered Logo
-              Image.asset(
-                'assets/logo.jpg', // Replace with your logo asset path
-                width: 150,
-                height: 150,
-              ),
-              const SizedBox(height: 20),
-              // Centered TextField
-              SizedBox(
-                width: 300, // Adjust width as needed
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'CoCo ist eine App welche das einfärben blablalba yappa yappa yappa yip yap yop',
-                    border: OutlineInputBorder(),
-                  ),
+
+              //BILD
+              ClipRRect( //für die Rounded Corners
+                borderRadius: BorderRadius.circular(20.0),
+                child: Image.asset(
+                  'assets/logo.jpg', // Replace with your logo asset path
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.cover,
                 ),
               ),
+
+              //SPACING
+              const SizedBox(height: 50),
+
+              //ÜBERSCHIFT
+              const Text(
+                'CoCo',
+                style: TextStyle(
+                  fontSize: 52,
+                  color: Colors.white,
+                  fontFamily: 'Times New Roman',
+                  fontWeight: FontWeight.bold,
+                  shadows: <Shadow>[
+                    Shadow(offset: Offset(1,1), blurRadius: 4.0, color: Colors.white)
+                  ],
+                ),
+              ),
+
+              //SPACING
               const SizedBox(height: 20),
+
+              //TEXT
+              Container(
+                width: 300, // Adjust width as needed
+                padding: const EdgeInsets.all(25),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.0),
+                  border: Border.all(color: Colors.white, width: 4),
+                ),
+                child: const Text(
+                  'CoCo ist ein Projekt, bei den man yappa yappa yappa yip yap yop',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 21,
+                    fontFamily: 'Times New Roman',
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+
+
+              //SPACING
+              const SizedBox(height: 30),
+
               // Google Sign-in Button
               ElevatedButton.icon(
                 onPressed: () {
+                  //TODO
                   // Handle Google Sign-in logic here
                   print('Sign in with Google pressed');
                 },
                 icon: Image.asset(
-                  'assets/google_logo.svg',
+                  'assets/google_logo.png',
                   width: 24,
                   height: 24,
                 ),
@@ -48,6 +87,7 @@ class MyApp extends StatelessWidget {
                   foregroundColor: Colors.black,
                 ),
               ),
+
             ],
           ),
         ),
