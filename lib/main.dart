@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
             children: [
               // Centered Logo
               Image.asset(
-                'assets/logo.png', // Replace with your logo asset path
-                width: 150, // Adjust logo size as needed
+                'assets/logo.jpg', // Replace with your logo asset path
+                width: 150,
                 height: 150,
               ),
               const SizedBox(height: 20),
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
                 width: 300, // Adjust width as needed
                 child: TextField(
                   decoration: InputDecoration(
-                    hintText: 'Enter your text here',
+                    hintText: 'CoCo ist eine App welche das einfärben blablalba yappa yappa yappa yip yap yop',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
                   print('Sign in with Google pressed');
                 },
                 icon: Image.asset(
-                  'assets/google_logo.png', // Replace with your Google logo asset path
+                  'assets/google_logo.svg',
                   width: 24,
                   height: 24,
                 ),
