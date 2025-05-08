@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class EventPickerScreen extends StatefulWidget {
   @override
@@ -16,13 +17,21 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
     "Event 4",
     "Event 5",
     "Event 6"
-  ]; // Replace with your actual event data
+  ];
+  List<bool> _eventVisible = [];
+  List<Color> _eventColor = [];
   List<String> _filteredEvents = [];
 
   @override
   void initState() {
     super.initState();
     _filteredEvents = _events;
+  }
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    _eventColor = List<Color>.filled(_events.length, Colors.black);
+    _eventVisible= List<bool>.filled(_events.length, false);
   }
 
   void _filterEvents() {
@@ -58,29 +67,51 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: Text("Event Picker"),
+        title: Text("Event Picker", style: TextStyle(fontSize: 24, fontFamily: 'NewComputerModern')),
+        backgroundColor: Colors.brown,
+        foregroundColor: Colors.white,
+
       ),
       body: Column(
         children: [
+
+          //SEACH BAR
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
                 labelText: "Search Events",
+                labelStyle: TextStyle(fontSize: 18, fontFamily: 'NewComputerModern', ),
                 prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  borderSide: BorderSide(width: 2.0, color: Colors.brown),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  borderSide: BorderSide(color: Colors.brown, width: 4.0),
+                ),
               ),
               onChanged: (value) => _filterEvents(),
             ),
           ),
+
+          //DATE BUTTONS
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
+
+                //START DATE BUTTON
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.brown,
+                    foregroundColor: Colors.white,
+                  ),
                   onPressed: () => _selectDate(context, true),
                   child: Text(
                     _startDate == null
@@ -88,7 +119,13 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                         : "${_startDate!.day}.${_startDate!.month}.${_startDate!.year}",
                   ),
                 ),
+
+                //END DATE BUTTON
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.brown,
+                    foregroundColor: Colors.white,
+                  ),
                   onPressed: () => _selectDate(context, false),
                   child: Text(
                     _endDate == null
@@ -99,17 +136,60 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
               ],
             ),
           ),
+
+          //LIST OF EVENTS
           Expanded(
             child: ListView.builder(
               itemCount: _filteredEvents.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(_filteredEvents[index]),
-                  // Add onTap to navigate or do something with the selected event
-                  onTap: () {
-                    // Handle event tap
-                    print('Tapped on ${_filteredEvents[index]}');
-                  },
+                final eventIndex = _events.indexOf(_filteredEvents[index]);
+                return Column(
+                  children: [
+                    ListTile(
+                      title: Text(_filteredEvents[index], style: TextStyle(fontSize: 18, fontFamily: 'NewComputerModern', )),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+
+                          //EIN/AUSBLENDEN
+                          IconButton(
+                            icon: Icon(
+                              _eventVisible[eventIndex]
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _eventVisible[eventIndex] = !_eventVisible[eventIndex];
+                              });
+                            },
+                          ),
+
+                          //FARBWEAHLER
+                          IconButton(
+                            icon: Icon(Icons.color_lens, color: _eventColor[eventIndex]),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text("Wähle eine Farbe", style: TextStyle(fontSize: 18, fontFamily: 'NewComputerModern', )),
+                                    content: Text("Farb auswahl hier"),
+                                    actions: [TextButton(onPressed: ()=>Navigator.pop(context), child: Text("OK", style: TextStyle(fontSize: 18, fontFamily: 'NewComputerModern', )))],
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ]
+                      ),
+                      onTap: () {
+
+                        print('Tapped on ${_filteredEvents[index]}');
+                      },
+                    ),
+
+                  ],
                 );
               },
             ),

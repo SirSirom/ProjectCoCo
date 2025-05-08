@@ -36,9 +36,9 @@ class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
       backgroundColor: Colors.brown,
 
       appBar: AppBar(
-        title: const Text('Enable Calendars',
-            style: TextStyle(color: Colors.black, fontSize: 24, fontFamily: 'NewComputerModern')),
-        backgroundColor: Colors.brown[100],
+        title: const Text('Enable Calendars', style: TextStyle(fontFamily: 'NewComputerModern', fontSize: 24,)),
+        backgroundColor: Colors.brown,
+        foregroundColor: Colors.white,
       ),
 
       body: Stack(
