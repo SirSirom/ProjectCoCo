@@ -112,41 +112,74 @@ class LoginGoogleScreen extends StatelessWidget {
   }
 }
 
-class EnableCalendarsScreen extends StatelessWidget {
+class EnableCalendarsScreen extends StatefulWidget {
   const EnableCalendarsScreen({super.key});
+
+  @override
+  State<EnableCalendarsScreen> createState() => _EnableCalendarsScreenState();
+}
+
+class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
+  // Sample data for calendars
+  final List<Map<String, dynamic>> _calendars = [
+    {'name': 'Calendar 1', 'enabled': false},
+    {'name': 'Calendar 2', 'enabled': true},
+    {'name': 'Calendar 3', 'enabled': false},
+    {'name': 'Calendar 4', 'enabled': true},
+    {'name': 'Calendar 5', 'enabled': false},
+    {'name': 'Calendar 6', 'enabled': false},
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.brown,
+
       appBar: AppBar(
-        title: const Text(
-            'Enable Calendars',
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 24, fontFamily: 'NewComputerModern'
-            )
-        ),
+        title: const Text('Enable Calendars',
+            style: TextStyle(color: Colors.black, fontSize: 24, fontFamily: 'NewComputerModern')),
         backgroundColor: Colors.brown[100],
       ),
-      body: Center(
 
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          //TEXT
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Text(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //TEXT
+            const Text(
               "Please enable Calendars you want to be colored by CoCo",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 21,
-                fontFamily: 'NewComputerModern',
+              style: TextStyle(color: Colors.white, fontSize: 21, fontFamily: 'NewComputerModern'),
+            ),
+            const SizedBox(height: 20),
+            //SCROLLABLE LIST
+            Expanded(
+              child: ListView.builder(
+                itemCount: _calendars.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: Switch(
+                      value: _calendars[index]['enabled'],
+                      onChanged: (bool newValue) {
+                        setState(() {
+                          _calendars[index]['enabled'] = newValue;
+                        });
+                      },
+                      activeColor: Colors.green,
+                      inactiveTrackColor: Colors.grey,
+                    ),
+                    title: Text(
+                      _calendars[index]['name'],
+                      style: const TextStyle(
+                          color: Colors.white, fontSize: 18, fontFamily: 'NewComputerModern'),
+                    ),
+                  );
+                },
               ),
             ),
-          ),
+          ],
         ),
-
-      )
+      ),
     );
   }
 }
