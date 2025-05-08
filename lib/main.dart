@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/googleloginscreen',
       routes: {
         '/googleloginscreen': (context) => const LoginGoogleScreen(),
+        '/enablecalendarsscreen': (context) => const EnableCalendarsScreen(),
         //'/home': (context) => const HomeScreen(),
         //... Weitere Routen hinzufügen ...
       }
@@ -34,12 +35,14 @@ class LoginGoogleScreen extends StatelessWidget {
             //BILD
             ClipRRect( //für die Rounded Corners
               borderRadius: BorderRadius.circular(20.0),
+
               child: Image.asset(
                 'assets/logo.jpg', // Replace with your logo asset path
                 width: 150,
                 height: 150,
                 fit: BoxFit.cover,
               ),
+
             ),
 
             //SPACING
@@ -53,9 +56,6 @@ class LoginGoogleScreen extends StatelessWidget {
                 color: Colors.white,
                 fontFamily: 'Times New Roman',
                 fontWeight: FontWeight.bold,
-                shadows: <Shadow>[
-                  Shadow(offset: Offset(1,1), blurRadius: 4.0, color: Colors.white)
-                ],
               ),
             ),
 
@@ -65,7 +65,7 @@ class LoginGoogleScreen extends StatelessWidget {
             //TEXT
             Container(
               width: 300, // Adjust width as needed
-              padding: const EdgeInsets.all(25),
+              padding: const EdgeInsets.all(25), //Platz zw. Text & Border
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.0),
                 border: Border.all(color: Colors.white, width: 4),
@@ -85,12 +85,14 @@ class LoginGoogleScreen extends StatelessWidget {
             //SPACING
             const SizedBox(height: 30),
 
-            // Google Sign-in Button
+            //GOOGLE SIGN IN BUTTON
             ElevatedButton.icon(
               onPressed: () {
                 //TODO
                 // Handle Google Sign-in logic here
                 print('Sign in with Google pressed');
+                //if(google authenticated){}
+                Navigator.pushNamed(context, '/enablecalendarsscreen');
               },
               icon: Image.asset(
                 'assets/google_logo.png',
@@ -107,6 +109,29 @@ class LoginGoogleScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class EnableCalendarsScreen extends StatelessWidget {
+  const EnableCalendarsScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Enable Calendars'),
+      ),
+      body: Center(
+
+        //TEXT
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Please enable Calendars you want to be colored by CoCo"
+          ),
+        ),
+
+      )
     );
   }
 }
