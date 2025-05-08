@@ -67,7 +67,7 @@ class LoginGoogleScreen extends StatelessWidget {
               padding: const EdgeInsets.all(25), //Platz zw. Text & Border
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.0),
-                border: Border.all(color: Colors.white, width: 4),
+                border: Border.all(color: Colors.brown.shade100, width: 4),
               ),
               child: const Text(
                 'CoCo ist ein Projekt, bei den man yappa yappa yappa yip yap yop',
