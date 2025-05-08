@@ -185,7 +185,8 @@ class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
                           },
                           activeColor: Colors.green,
                           inactiveTrackColor: Colors.brown[100],
-
+                          inactiveThumbColor: Colors.brown[400],
+                          //TODO: grauen ränder der inaktiven auf brown[100] setzen
                         ),
                         title: Text(
                           _calendars[index]['name'],
@@ -206,7 +207,8 @@ class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
               children: [
                 TextButton(onPressed: (){},
                     child: const Text("skip", style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'NewComputerModern'))),
-                ElevatedButton(onPressed: (){}, child: const Text("continue", style: TextStyle(color: Colors.black, fontSize: 18, fontFamily: 'NewComputerModern')), style: ElevatedButton.styleFrom(backgroundColor: Colors.brown[100]))
+                ElevatedButton(onPressed: (){},
+                    child: const Text("continue", style: TextStyle(color: Colors.black, fontSize: 18, fontFamily: 'NewComputerModern')), style: ElevatedButton.styleFrom(backgroundColor: Colors.brown[100]))
               ],
             ),
           ),
