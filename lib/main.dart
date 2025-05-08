@@ -37,7 +37,7 @@ class LoginGoogleScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(20.0),
 
               child: Image.asset(
-                'assets/logo.jpg', // Replace with your logo asset path
+                'assets/images/logo.png', // Replace with your logo asset path
                 width: 150,
                 height: 150,
                 fit: BoxFit.cover,
