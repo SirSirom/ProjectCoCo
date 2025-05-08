@@ -18,15 +18,15 @@ class LoginGoogleScreen extends StatelessWidget {
 
               child: Image.asset(
                 'assets/images/logo.png', // Replace with your logo asset path
-                width: 150,
-                height: 150,
+                width: 300,
+                height: 300,
                 fit: BoxFit.cover,
               ),
 
             ),
 
             //SPACING
-            const SizedBox(height: 30),
+            const SizedBox(height: 0),
 
             //ÜBERSCHIFT
             const Text(
