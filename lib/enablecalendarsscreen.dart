@@ -93,9 +93,9 @@ class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
             right: 16,
             child: Row(
               children: [
-                TextButton(onPressed: (){},
+                TextButton(onPressed: (){ Navigator.pushNamed(context, '/eventpickerscreen'); },
                     child: const Text("skip", style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'NewComputerModern'))),
-                ElevatedButton(onPressed: (){},
+                ElevatedButton(onPressed: (){ Navigator.pushNamed(context, '/eventpickerscreen'); },
                     child: const Text("continue", style: TextStyle(color: Colors.black, fontSize: 18, fontFamily: 'NewComputerModern')), style: ElevatedButton.styleFrom(backgroundColor: Colors.brown[100]))
               ],
             ),
