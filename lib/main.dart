@@ -46,7 +46,7 @@ class LoginGoogleScreen extends StatelessWidget {
             ),
 
             //SPACING
-            const SizedBox(height: 50),
+            const SizedBox(height: 30),
 
             //ÜBERSCHIFT
             const Text(
@@ -54,13 +54,12 @@ class LoginGoogleScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 52,
                 color: Colors.white,
-                fontFamily: 'Times New Roman',
-                fontWeight: FontWeight.bold,
+                fontFamily: 'NewComputerModern',
               ),
             ),
 
             //SPACING
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
 
             //TEXT
             Container(
@@ -75,7 +74,7 @@ class LoginGoogleScreen extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 21,
-                  fontFamily: 'Times New Roman',
+                  fontFamily: 'NewComputerModern',
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -118,16 +117,32 @@ class EnableCalendarsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.brown,
       appBar: AppBar(
-        title: const Text('Enable Calendars'),
+        title: const Text(
+            'Enable Calendars',
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 24, fontFamily: 'NewComputerModern'
+            )
+        ),
+        backgroundColor: Colors.brown[100],
       ),
       body: Center(
 
-        //TEXT
-        child: Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Please enable Calendars you want to be colored by CoCo"
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          //TEXT
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              "Please enable Calendars you want to be colored by CoCo",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 21,
+                fontFamily: 'NewComputerModern',
+              ),
+            ),
           ),
         ),
 
