@@ -84,6 +84,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
 
     Future<void> _handleSignIn() async{
       try {
+        await _googleSignIn.signOut();
         await _googleSignIn.signIn();
         Navigator.pushNamed(context, '/enablecalendarsscreen');
       } catch (error) {
@@ -93,7 +94,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
 
     Future<void> _logout() async{
       await _googleSignIn.signOut();
-      Navigator.pushNamed(context, '/logingooglescreen');
+      Navigator.pushNamed(context, '/googleloginscreen');
     }
 
     return Scaffold(
