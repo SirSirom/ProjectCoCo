@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class EventPickerScreen extends StatefulWidget {
   const EventPickerScreen({super.key});
@@ -7,6 +8,18 @@ class EventPickerScreen extends StatefulWidget {
 @override
   _EventPickerScreenState createState() => _EventPickerScreenState();
 }
+
+//Init google sign in Scopes für Google Auth
+const List<String> scopes = <String>[
+  'email',
+  'https://www.googleapis.com/auth/calendar'
+];//alle scopes: https://developers.google.com/identity/protocols/oauth2/scopes
+
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  // Optional clientId
+  // clientId: 'your-client_id.apps.googleusercontent.com',
+  scopes: scopes,
+);
 
 class _EventPickerScreenState extends State<EventPickerScreen> {
   final TextEditingController _searchController = TextEditingController();
@@ -68,14 +81,56 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    Future<void> _handleSignIn() async{
+      try {
+        await _googleSignIn.signIn();
+        Navigator.pushNamed(context, '/enablecalendarsscreen');
+      } catch (error) {
+        print(error);
+      }
+    }
+
+    Future<void> _logout() async{
+      await _googleSignIn.signOut();
+      Navigator.pushNamed(context, '/logingooglescreen');
+    }
+
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
         title: Text("Event Picker", style: TextStyle(fontSize: 24, fontFamily: 'NewComputerModern')),
         backgroundColor: Colors.brown,
         foregroundColor: Colors.white,
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) async {
+              if (value == 'switch_account') {
+                print('Switch Account selected');
+                await _handleSignIn();
+              } else
+              if (value == 'logout') {
+                print('Log Out selected');
+                await _logout();
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem<String>(
+                  value: 'switch_account',
+                  child: Text('Switch Account'),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'logout',
+                  child: Text('Log Out'),
+                ),
+              ];
+            },
+          ),
 
+        ],
       ),
+
       body: Column(
         children: [
 

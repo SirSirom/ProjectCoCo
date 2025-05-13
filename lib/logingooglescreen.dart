@@ -89,7 +89,7 @@ class LoginGoogleScreen extends StatelessWidget {
             //GOOGLE SIGN IN BUTTON
             ElevatedButton.icon(
               onPressed: () async {
-                //await _handleSignIn();    erstmal ausgesetzt
+                await _handleSignIn();
                 Navigator.pushNamed(context, '/enablecalendarsscreen');
               },
               icon: Image.asset(
