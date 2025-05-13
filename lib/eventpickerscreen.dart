@@ -82,7 +82,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
   @override
   Widget build(BuildContext context) {
 
-    Future<void> _handleSignIn() async{
+    Future<void> _relogin() async{
       try {
         await _googleSignIn.signOut();
         await _googleSignIn.signIn();
@@ -108,7 +108,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
             onSelected: (value) async {
               if (value == 'switch_account') {
                 print('Switch Account selected');
-                await _handleSignIn();
+                await _relogin();
               } else
               if (value == 'logout') {
                 print('Log Out selected');
