@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class EventPickerScreen extends StatefulWidget {
-  @override
+  const EventPickerScreen({super.key});
+
+@override
   _EventPickerScreenState createState() => _EventPickerScreenState();
 }
 
@@ -10,7 +12,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
   final TextEditingController _searchController = TextEditingController();
   DateTime? _startDate;
   DateTime? _endDate;
-  List<String> _events = [
+  final List<String> _events = [
     "Event 1",
     "Event 2",
     "Event 3",
@@ -174,8 +176,28 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     title: Text("Wähle eine Farbe", style: TextStyle(fontSize: 18, fontFamily: 'NewComputerModern', )),
-                                    content: Text("Farb auswahl hier"),
-                                    actions: [TextButton(onPressed: ()=>Navigator.pop(context), child: Text("OK", style: TextStyle(fontSize: 18, fontFamily: 'NewComputerModern', )))],
+                                    content: SingleChildScrollView(
+                                      child: BlockPicker(
+                                        pickerColor: _eventColor[eventIndex],
+                                        onColorChanged: (Color color) {
+                                          setState(() {
+                                            _eventColor[eventIndex] = color;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(
+                                          "OK",
+                                          style: TextStyle(fontSize: 18, fontFamily: 'NewComputerModern', ),
+                                        ),
+                                      ),
+                                    ],
+
                                   );
                                 },
                               );
