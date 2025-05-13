@@ -1,10 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+//Init google sign in Scopes für Google Auth
+const List<String> scopes = <String>[
+  'email',
+  'https://www.googleapis.com/auth/calendar'
+];//alle scopes: https://developers.google.com/identity/protocols/oauth2/scopes
+
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  // Optional clientId
+  // clientId: 'your-client_id.apps.googleusercontent.com',
+  scopes: scopes,
+);
 
 class LoginGoogleScreen extends StatelessWidget {
   const LoginGoogleScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    Future<void> _handleSignIn() async {
+      try {
+        await _googleSignIn.signIn();
+      } catch (error) {
+        print(error);
+      }
+    }
+
     return Scaffold( //scaffold für die App
       backgroundColor: Colors.brown,
       body: Center( //body für die App
@@ -66,11 +88,8 @@ class LoginGoogleScreen extends StatelessWidget {
 
             //GOOGLE SIGN IN BUTTON
             ElevatedButton.icon(
-              onPressed: () {
-                //TODO
-                // Handle Google Sign-in logic here
-                print('Sign in with Google pressed');
-                //if(google authenticated){}
+              onPressed: () async {
+                //await _handleSignIn();    erstmal ausgesetzt
                 Navigator.pushNamed(context, '/enablecalendarsscreen');
               },
               icon: Image.asset(
