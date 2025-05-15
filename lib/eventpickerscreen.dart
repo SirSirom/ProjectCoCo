@@ -1,10 +1,12 @@
 
 import 'package:flutter/material.dart';
-import 'package:project_coco/Mocks/json_mocks.dart';
-import 'package:project_coco/models/CalendarModel.dart';
-import 'package:project_coco/models/EventModel.dart';
-import 'package:project_coco/models/PropertyModel.dart';
+import 'package:http/http.dart';
+import 'package:project_coco/api/Mocks/json_mocks.dart';
+import 'package:project_coco/api/models/CalendarModel.dart';
+import 'package:project_coco/api/models/EventModel.dart';
+import 'package:project_coco/api/models/PropertyModel.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:project_coco/api/util/ApiHelper.dart';
 
 class EventPickerScreen extends StatefulWidget {
   const EventPickerScreen({super.key});
@@ -15,7 +17,7 @@ class EventPickerScreen extends StatefulWidget {
 
 class _EventPickerScreenState extends State<EventPickerScreen> {
   final TextEditingController _searchController = TextEditingController();
-  final Map<String,PropertyModel> _properties = PropertyModel.propertiesFromJson(propertiesJSON);
+  late Map<String,PropertyModel> _properties;
   List<CalendarModel> calendars = CalendarModel.calendarsFromJson(calendarJSON);
   final List<EventModel> _events = EventModel.eventsFromJson(eventsJSON);
   DateTime _startDate = DateTime.now();
@@ -25,6 +27,8 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
   @override
   void initState() {
     super.initState();
+    loadproperties();
+    print(_properties);
     _filteredEvents = _events;
   }
   @override
@@ -244,6 +248,11 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
         ],
       ),
     );
+  }
+
+  void loadproperties() async{
+    Response response = await ApiHelper.sendRequest('', HttpMethod.GET, null);
+    _properties = PropertyModel.propertiesFromJson(response.body);
   }
 }
 

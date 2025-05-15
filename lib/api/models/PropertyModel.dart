@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:project_coco/models/EventModel.dart';
+import 'package:project_coco/api/models/EventModel.dart';
 
 
 class PropertyModel {
