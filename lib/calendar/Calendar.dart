@@ -1,7 +1,6 @@
 import 'package:color/color.dart';
 
 import "EventGroup.dart";
-import 'package:http/http.dart' as http;
 
 /**
  * Class to import data of google calendars.

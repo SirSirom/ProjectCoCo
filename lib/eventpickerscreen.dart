@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:project_coco/Mocks/JsonMocks.dart';
+import 'package:project_coco/Mocks/json_mocks.dart';
 import 'package:project_coco/models/CalendarModel.dart';
 import 'package:project_coco/models/EventModel.dart';
 import 'package:project_coco/models/PropertyModel.dart';
@@ -135,6 +135,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                   ),
                   onPressed: () => _selectDate(context, true),
                   child: Text(
+                    // ignore: unnecessary_null_comparison
                     _startDate == null
                         ? "Start Date"
                         : "${_startDate.day}.${_startDate.month}.${_startDate.year}",
@@ -149,6 +150,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                   ),
                   onPressed: () => _selectDate(context, false),
                   child: Text(
+                    // ignore: unnecessary_null_comparison
                     _endDate == null
                         ? "End Date"
                         : "${_endDate.day}.${_endDate.month}.${_endDate.year}",
