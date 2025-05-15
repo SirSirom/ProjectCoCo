@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:color/color.dart';
+import 'dart:ui';
 
 /**
  *
@@ -35,7 +34,7 @@ class CalendarModel {
       id: jsonMap["id"] as String,
       name: jsonMap["name"] as String,
       description: jsonMap["description"] as String,
-      color: Color.hex(jsonMap["color"] as String),
+      color: Color(int.parse('0xFF${(jsonMap["Color"] as String).substring(1)}')),
       timeZone: jsonMap["timeZone"] as String,
       registered: jsonMap["registered"] as bool
     );
