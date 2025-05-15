@@ -72,7 +72,7 @@ class LoginGoogleScreen extends StatelessWidget {
                 border: Border.all(color: Colors.brown.shade100, width: 4),
               ),
               child: const Text(
-                'CoCo ist ein Projekt, bei den man yappa yappa yappa yip yap yop',
+                'CoCo ist ein Projekt, welches verschiedene Events aus deinen Google-Kalendern so einfärbt oder ausblendet, wie du es möchtest.',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 21,
@@ -93,7 +93,7 @@ class LoginGoogleScreen extends StatelessWidget {
                 Navigator.pushNamed(context, '/enablecalendarsscreen');
               },
               icon: Image.asset(
-                'assets/google_logo.png',
+                'assets/images/google_logo.png',
                 width: 24,
                 height: 24,
               ),
