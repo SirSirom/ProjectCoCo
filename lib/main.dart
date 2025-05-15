@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:project_coco/signin/GoogleLogin.dart';
 
 void main() {
   runApp(const MyApp());
@@ -61,29 +62,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  static const List<String> scopes = <String>[
-    'https://www.google.com/calendar/feeds',
-    'https://www.googleapis.com/auth/script.scriptapp',
-    'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/drive.readonly'
-  ];
-
-  GoogleSignIn _googleSignIn = GoogleSignIn(
-    // Optional clientId
-      clientId: '642352946638-eg7ipfcdajlh9vmrf1a6jq2n8nejsljr.apps.googleusercontent.com',
-      scopes: scopes
-  );
-
-  Future<GoogleSignInAccount?> _handleSignIn() async {
-    try {
-      //GoogleSignInPlugin().renderButton();
-      return await _googleSignIn.signIn();
-    } catch (error) {
-      print(error);
-    }
-    return null;
-  }
-
   Future<void> _sendHttpRequestWithAuth(Map<String, String> authHeaders) async {
     var url = Uri.parse('https://script.google.com/macros/s/AKfycbyHxsZ4f_Q9UIUKAK7tk1ug0ZIPeaIRZTSVXT9KmsQ/dev/Calendars'); // Ersetze dies mit der tatsächlichen API-URL
 
@@ -109,22 +87,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<Map<String, String>> _getAccessToken() async {
-    final account = await _googleSignIn.signIn();
-    print("email: " + account!.email);
-    final auth = await account.authentication;
-    return account.authHeaders;
-  }
-
   void _incrementCounter() async {
     try {
-      final accessToken = await _getAccessToken();
+      final account = await GoogleLogin.handleSignIn();
+      final accessToken = await GoogleLogin.getAccessToken(account);
       print("accessToken: " + accessToken.toString());
-      if (accessToken != null) {
-        await _sendHttpRequestWithAuth(accessToken);
-      } else {
-        print("Kein Access Token verfügbar.");
-      }
+      await _sendHttpRequestWithAuth(accessToken);
 
       setState(() {
         _counter++;
