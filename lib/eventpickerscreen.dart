@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:project_coco/Mocks/JsonMocks.dart';
+import 'package:project_coco/models/CalendarModel.dart';
+import 'package:project_coco/models/EventModel.dart';
+import 'package:project_coco/models/PropertyModel.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -9,33 +15,14 @@ class EventPickerScreen extends StatefulWidget {
   _EventPickerScreenState createState() => _EventPickerScreenState();
 }
 
-//Init google sign in Scopes für Google Auth
-const List<String> scopes = <String>[
-  'email',
-  'https://www.googleapis.com/auth/calendar'
-];//alle scopes: https://developers.google.com/identity/protocols/oauth2/scopes
-
-GoogleSignIn _googleSignIn = GoogleSignIn(
-  // Optional clientId
-  // clientId: 'your-client_id.apps.googleusercontent.com',
-  scopes: scopes,
-);
-
 class _EventPickerScreenState extends State<EventPickerScreen> {
   final TextEditingController _searchController = TextEditingController();
-  DateTime? _startDate;
-  DateTime? _endDate;
-  final List<String> _events = [
-    "Event 1",
-    "Event 2",
-    "Event 3",
-    "Event 4",
-    "Event 5",
-    "Event 6"
-  ];
-  List<bool> _eventVisible = [];
-  List<Color> _eventColor = [];
-  List<String> _filteredEvents = [];
+  Map<String,PropertyModel> _properties = PropertyModel.propertiesFromJson(propertiesJSON);
+  List<CalendarModel> calendars = CalendarModel.calendarsFromJson(calendarJSON);
+  List<EventModel> _events = EventModel.eventsFromJson(eventsJSON);
+  DateTime _startDate = DateTime.now();
+  DateTime _endDate = DateTime.now();
+  late List<EventModel> _filteredEvents;
 
   @override
   void initState() {
@@ -45,26 +32,21 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
   @override
   void didChangeDependencies(){
     super.didChangeDependencies();
-    _eventColor = List<Color>.filled(_events.length, Colors.black);
-    _eventVisible= List<bool>.filled(_events.length, false);
   }
 
   void _filterEvents() {
     setState(() {
       _filteredEvents = _events.where((event) {
-        // Implement date filtering logic here if necessary
-        // You might need to compare event dates with _startDate and _endDate
-        return event
-            .toLowerCase()
-            .contains(_searchController.text.toLowerCase());
+        return event.title.toLowerCase().contains(_searchController.text.toLowerCase());
       }).toList();
+      print(_filteredEvents);
     });
   }
 
   Future<void> _selectDate(BuildContext context, bool isStart) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: isStart ? _startDate ?? DateTime.now() : _endDate ?? DateTime.now(),
+      initialDate: isStart ? _startDate : _endDate,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
@@ -81,22 +63,6 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    Future<void> _relogin() async{
-      try {
-        await _googleSignIn.signOut();
-        await _googleSignIn.signIn();
-        Navigator.pushNamed(context, '/enablecalendarsscreen');
-      } catch (error) {
-        print(error);
-      }
-    }
-
-    Future<void> _logout() async{
-      await _googleSignIn.signOut();
-      Navigator.pushNamed(context, '/googleloginscreen');
-    }
-
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
@@ -108,11 +74,10 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
             onSelected: (value) async {
               if (value == 'switch_account') {
                 print('Switch Account selected');
-                await _relogin();
               } else
               if (value == 'logout') {
                 print('Log Out selected');
-                await _logout();
+
               }
             },
             itemBuilder: (BuildContext context) {
@@ -200,11 +165,14 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
             child: ListView.builder(
               itemCount: _filteredEvents.length,
               itemBuilder: (context, index) {
-                final eventIndex = _events.indexOf(_filteredEvents[index]);
+                final event = _events[index];
+                final eventProperty = _properties.containsKey(event.title) ? _properties[event.title] : PropertyModel(color: EventColor.NONE, hidden: true);
+
+
                 return Column(
                   children: [
                     ListTile(
-                      title: Text(_filteredEvents[index], style: TextStyle(fontSize: 18, fontFamily: 'NewComputerModern', )),
+                      title: Text(event.title, style: TextStyle(fontSize: 18, fontFamily: 'NewComputerModern', )),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -212,20 +180,20 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                           //EIN/AUSBLENDEN
                           IconButton(
                             icon: Icon(
-                              _eventVisible[eventIndex]
+                              eventProperty!.hidden
                                   ? Icons.visibility_off
                                   : Icons.visibility,
                             ),
                             onPressed: () {
                               setState(() {
-                                _eventVisible[eventIndex] = !_eventVisible[eventIndex];
+                                eventProperty.hidden = !eventProperty.hidden;
                               });
                             },
                           ),
 
                           //FARBWEAHLER
                           IconButton(
-                            icon: Icon(Icons.color_lens, color: _eventColor[eventIndex]),
+                            icon: Icon(Icons.color_lens, color: eventProperty.color.color),
                             onPressed: () {
                               showDialog(
                                 context: context,
@@ -234,10 +202,11 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                                     title: Text("Wähle eine Farbe", style: TextStyle(fontSize: 18, fontFamily: 'NewComputerModern', )),
                                     content: SingleChildScrollView(
                                       child: BlockPicker(
-                                        pickerColor: _eventColor[eventIndex],
+                                        pickerColor: eventProperty.color.color,
+                                        availableColors: List<Color>.from(EventColor.values.map((eventColor) => eventColor.color ?? Color(0xFFFFFFFF))),
                                         onColorChanged: (Color color) {
                                           setState(() {
-                                            _eventColor[eventIndex] = color;
+                                            eventProperty.color = EventColor.fromColor(color);
                                           });
                                         },
                                       ),
