@@ -21,7 +21,6 @@ class PropertyModel {
 
   @override
   String toString() {
-    // TODO: implement toString
     return "{\"color\": ${color.index}, \"hidden\": $hidden}";
   }
 }

@@ -49,7 +49,6 @@ class EventModel {
   static List<EventModel> eventsFromJson(String str) => List<EventModel>.from(json.decode(str).map((x) => EventModel.fromJson(x)));
   @override
   String toString() {
-    // TODO: implement toString
     return '''{
       "id": $id,
       "title": "$title",
@@ -101,18 +100,26 @@ enum EventType{
 enum EventColor {
 /// Possible colors for google calendar events
 /// ref https://developers.google.com/apps-script/reference/calendar/event-color?hl=de
-  NONE,
-  PALE_BLUE,
-  PALE_GREEN,
-  MAUVE,
-  PALE_RED,
-  YELLOW,
-  ORANGE,
-  CYAN,
-  GRAY,
-  BLUE,
-  GREEN,
-  RED;
+  NONE(id: 0, color: null),
+  PALE_BLUE(id: 1,  color: Color(0xFFA4BDFC)),
+  PALE_GREEN(id: 2,  color: Color(0xFF7AE7BF)),
+  MAUVE(id: 3,  color: Color(0xFFBDADFF)),
+  PALE_RED(id: 4,  color: Color(0xFFFF887C)),
+  YELLOW(id: 5,  color: Color(0xFFFBD75B)),
+  ORANGE(id: 6,  color: Color(0xFFFFB878)),
+  CYAN(id: 7,  color: Color(0xFF46D6DB)),
+  GRAY(id: 8,  color: Color(0xFFE1E1E1)),
+  BLUE(id: 9,  color: Color(0xFF5484ED)),
+  GREEN(id: 10, color: Color(0xFF51B749)),
+  RED(id: 11, color: Color(0xFFDC2127));
+
+  final int id;
+  final Color? color;
+
+  const EventColor({
+    required this.id,
+    required this.color
+  });
 
   factory EventColor.fromId(int? id){
     return EventColor.values.firstWhere((eventColor) => eventColor.index == id, orElse: () => EventColor.NONE);
@@ -123,36 +130,5 @@ enum EventColor {
   @override
   String toString(){
     return "${index != 0? index : ''}";
-  }
-}
-
-extension ColorsExtension on EventColor {
-  Color? get color {
-    switch (this) {
-      case EventColor.PALE_BLUE:
-        return Color(0xFFA4BDFC);
-      case EventColor.PALE_GREEN:
-        return Color(0xFF7AE7BF);
-      case EventColor.MAUVE:
-        return Color(0xFFBDADFF);
-      case EventColor.PALE_RED:
-        return Color(0xFFFF887C);
-      case EventColor.YELLOW:
-        return Color(0xFFFBD75B);
-      case EventColor.ORANGE:
-        return Color(0xFFFFB878);
-      case EventColor.CYAN:
-        return Color(0xFF46D6DB);
-      case EventColor.GRAY:
-        return Color(0xFFE1E1E1);
-      case EventColor.BLUE:
-        return Color(0xFF5484ED);
-      case EventColor.GREEN:
-        return Color(0xFF51B749);
-      case EventColor.RED:
-        return Color(0xFFDC2127);
-      case EventColor.NONE:
-        return null;
-    }
   }
 }
