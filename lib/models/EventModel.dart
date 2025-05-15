@@ -51,17 +51,17 @@ class EventModel {
   String toString() {
     // TODO: implement toString
     return '''{
-      \"id\": $id,
-      \"title\": \"$title\",
-      \"description\": \"$description\",
-      \"color\": \"$color\",
-      \"eventType\": \"$eventType\",
-      \"creators\": $creators,
-      \"transparency\": \"$transparency\",
-      \"location\": \"$location\",
-      \"startTime\": \"$startTime\",
-      \"endTime\": \"$endTime\",
-      \"tags\": $tags
+      "id": $id,
+      "title": "$title",
+      "description": "$description",
+      "color": "$color",
+      "eventType": "$eventType",
+      "creators": $creators,
+      "transparency": "$transparency",
+      "location": "$location",
+      "startTime": "$startTime",
+      "endTime": "$endTime",
+      "tags": $tags
      }''';
   }
 }
@@ -99,10 +99,8 @@ enum EventType{
 }
 
 enum EventColor {
-/**
- * Possible colors for google calendar events
- * ref https://developers.google.com/apps-script/reference/calendar/event-color?hl=de
- */
+/// Possible colors for google calendar events
+/// ref https://developers.google.com/apps-script/reference/calendar/event-color?hl=de
   NONE,
   PALE_BLUE,
   PALE_GREEN,

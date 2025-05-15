@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'dart:ui';
 
-/**
- *
- * Class to import data of google calendars.
- */
+///
+/// Class to import data of google calendars.
 class CalendarModel {
 
   String? id;
@@ -34,7 +32,7 @@ class CalendarModel {
       id: jsonMap["id"] as String,
       name: jsonMap["name"] as String,
       description: jsonMap["description"] as String,
-      color: Color(int.parse('0xFF${(jsonMap["Color"] as String).substring(1)}')),
+      color: Color(int.parse('0xFF${(jsonMap["color"] as String).substring(1)}')),
       timeZone: jsonMap["timeZone"] as String,
       registered: jsonMap["registered"] as bool
     );
@@ -45,12 +43,12 @@ class CalendarModel {
   String toString() {
     // TODO: implement toString
     return '''{
-      \"id\": $id,
-      \"name\": \"$name\",
-      \"description\": \"$description\",
-      \"color\": \"${color.toString()}\",
-      \"timeZone\": \"$timeZone\",
-      \"registered\": $registered
+      "id": $id,
+      "name": "$name",
+      "description": "$description",
+      "color": "${color.toString()}",
+      "timeZone": "$timeZone",
+      "registered": $registered
      }''';
   }
 }

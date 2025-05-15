@@ -19,7 +19,7 @@ class LoginGoogleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    Future<void> _handleSignIn() async {
+    Future<void> handleSignIn() async {
       try {
         await _googleSignIn.signIn();
       } catch (error) {
@@ -89,7 +89,7 @@ class LoginGoogleScreen extends StatelessWidget {
             //GOOGLE SIGN IN BUTTON
             ElevatedButton.icon(
               onPressed: () async {
-                await _handleSignIn();
+                await handleSignIn();
                 Navigator.pushNamed(context, '/enablecalendarsscreen');
               },
               icon: Image.asset(

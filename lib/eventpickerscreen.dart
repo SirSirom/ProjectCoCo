@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:project_coco/Mocks/JsonMocks.dart';
@@ -6,7 +5,6 @@ import 'package:project_coco/models/CalendarModel.dart';
 import 'package:project_coco/models/EventModel.dart';
 import 'package:project_coco/models/PropertyModel.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class EventPickerScreen extends StatefulWidget {
   const EventPickerScreen({super.key});
@@ -17,9 +15,9 @@ class EventPickerScreen extends StatefulWidget {
 
 class _EventPickerScreenState extends State<EventPickerScreen> {
   final TextEditingController _searchController = TextEditingController();
-  Map<String,PropertyModel> _properties = PropertyModel.propertiesFromJson(propertiesJSON);
+  final Map<String,PropertyModel> _properties = PropertyModel.propertiesFromJson(propertiesJSON);
   List<CalendarModel> calendars = CalendarModel.calendarsFromJson(calendarJSON);
-  List<EventModel> _events = EventModel.eventsFromJson(eventsJSON);
+  final List<EventModel> _events = EventModel.eventsFromJson(eventsJSON);
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now();
   late List<EventModel> _filteredEvents;
@@ -139,7 +137,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                   child: Text(
                     _startDate == null
                         ? "Start Date"
-                        : "${_startDate!.day}.${_startDate!.month}.${_startDate!.year}",
+                        : "${_startDate.day}.${_startDate.month}.${_startDate.year}",
                   ),
                 ),
 
@@ -153,7 +151,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                   child: Text(
                     _endDate == null
                         ? "End Date"
-                        : "${_endDate!.day}.${_endDate!.month}.${_endDate!.year}",
+                        : "${_endDate.day}.${_endDate.month}.${_endDate.year}",
                   ),
                 ),
               ],
