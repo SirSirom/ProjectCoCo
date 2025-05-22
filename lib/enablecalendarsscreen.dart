@@ -8,7 +8,7 @@ class EnableCalendarsScreen extends StatefulWidget {
 }
 
 class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
-  // Sample data for calendars
+  // viele beispieleinträge, um scrollbarkeit zu testen
   final List<Map<String, dynamic>> _calendars = [
     {'name': 'Calendar 1', 'enabled': false},
     {'name': 'Calendar 2', 'enabled': true},
@@ -35,23 +35,25 @@ class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
     return Scaffold(
       backgroundColor: Colors.brown,
 
+      //die appbar am oberen rand
       appBar: AppBar(
         title: const Text('Enable Calendars', style: TextStyle(fontFamily: 'NewComputerModern', fontSize: 24,)),
         backgroundColor: Colors.brown,
         foregroundColor: Colors.white,
       ),
 
+
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0), //padding vom ganzen inhalt zum rand, sieht besser aus
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start, //.center sah auf größeren screens nicht so gut aus wie .start(links)
               children: [
 
                 //TEXT
                 const Text(
-                  "Please enable calendars you want to be colored by CoCo",
+                  "Wähle die Kalender aus, welche CoCo bearbeiten soll",
                   style: TextStyle(color: Colors.white, fontSize: 21, fontFamily: 'NewComputerModern'),
                 ),
 
@@ -59,11 +61,13 @@ class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
                 const SizedBox(height: 20),
 
                 //SCROLLABLE LIST
-                Expanded(
-                  child: ListView.builder(
+                Expanded( //Expanded macht es, dass das ListView.builder() den ganzen Platz des Containers einnimmt
+                  child: ListView.builder( //macht die eigentliche scrollable list
                     itemCount: _calendars.length,
-                    itemBuilder: (context, index) {
+                    itemBuilder: (context, index) { //wird für jeden eintrag gecalled
                       return ListTile(
+
+                        //AN/AUS SWITCH
                         leading: Switch(
                           value: _calendars[index]['enabled'],
                           onChanged: (bool newValue) {
@@ -74,8 +78,10 @@ class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
                           activeColor: Colors.green,
                           inactiveTrackColor: Colors.brown[100],
                           inactiveThumbColor: Colors.brown[400],
-                          //TODO: grauen ränder der inaktiven auf brown[100] setzen
+                          //TODO: grauen ränder der inaktiven auf brown[100] setzen, sind gerade grau
                         ),
+
+                        //TITEL/TEXT DES EINTRAGS
                         title: Text(
                           _calendars[index]['name'],
                           style: const TextStyle(
@@ -88,7 +94,9 @@ class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
               ],
             ),
           ),
-          Positioned(
+
+          //CONTINUE/SKIP BUTTONS
+          Positioned( //sollen unabhängig von den anderen Inhalten immer unten rechts positioniert werden, deswegen dieser container
             bottom: 16,
             right: 16,
             child: Row(

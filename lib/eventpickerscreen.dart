@@ -14,12 +14,13 @@ class EventPickerScreen extends StatefulWidget {
 }
 
 class _EventPickerScreenState extends State<EventPickerScreen> {
-  final TextEditingController _searchController = TextEditingController();
+  //variblen initalisieren
+  final TextEditingController _searchController = TextEditingController();//suchfeld
   final Map<String,PropertyModel> _properties = PropertyModel.propertiesFromJson(propertiesJSON);
   List<CalendarModel> calendars = CalendarModel.calendarsFromJson(calendarJSON);
   final List<EventModel> _events = EventModel.eventsFromJson(eventsJSON);
-  DateTime _startDate = DateTime.now();
-  DateTime _endDate = DateTime.now();
+  DateTime _startDate = DateTime.now();//das default ausgewählte startdatum
+  DateTime _endDate = DateTime.now();//das default ausgewählte enddatum
   late List<EventModel> _filteredEvents;
 
   @override
@@ -32,6 +33,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
     super.didChangeDependencies();
   }
 
+  //filtert die events nach dem suchfeld mit contains
   void _filterEvents() {
     setState(() {
       _filteredEvents = _events.where((event) {
@@ -41,6 +43,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
     });
   }
 
+  //date-picker dialogfenster
   Future<void> _selectDate(BuildContext context, bool isStart) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -63,19 +66,22 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.brown[50],
+
+      //app bar oben
       appBar: AppBar(
         title: Text("Event Picker", style: TextStyle(fontSize: 24, fontFamily: 'NewComputerModern')),
         backgroundColor: Colors.brown,
         foregroundColor: Colors.white,
         actions: [
+
+          //drei-Punkt-Optionen Fenster
           PopupMenuButton<String>(
             onSelected: (value) async {
               if (value == 'switch_account') {
-                print('Switch Account selected');
+                print('Switch Account selected'); //TODO switch-account implementieren
               } else
               if (value == 'logout') {
-                print('Log Out selected');
-
+                print('Log Out selected'); //TODO: logout implementieren
               }
             },
             itemBuilder: (BuildContext context) {
@@ -107,10 +113,12 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                 labelText: "Search Events",
                 labelStyle: TextStyle(fontSize: 18, fontFamily: 'NewComputerModern', ),
                 prefixIcon: Icon(Icons.search),
+                //rand
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20.0),
                   borderSide: BorderSide(width: 2.0, color: Colors.brown),
                 ),
+                //ändert den rand wenn fokussiert
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20.0),
                   borderSide: BorderSide(color: Colors.brown, width: 4.0),
@@ -231,8 +239,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                         ]
                       ),
                       onTap: () {
-
-                        print('Tapped on ${_filteredEvents[index]}');
+                        print('Tapped on ${_filteredEvents[index]}'); //TODO: Event öffnen?
                       },
                     ),
 

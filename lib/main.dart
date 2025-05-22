@@ -12,13 +12,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
+      //setzt die inition route, also der screen, welcher zuerst angezeigt wird
       initialRoute: '/googleloginscreen',
+      //alle weiteren möglichen routen
       routes: {
         '/googleloginscreen': (context) => const LoginGoogleScreen(),
         '/enablecalendarsscreen': (context) => const EnableCalendarsScreen(),
         '/eventpickerscreen': (context) => EventPickerScreen(),
-        //'/home': (context) => const HomeScreen(),
-        //... Weitere Routen hinzufügen ...
+        //'/irgendeinscreen': (context) => const IrgendeinScreen(),
+        //... routen dann hier hinzufügen ...
       }
     );
   }
