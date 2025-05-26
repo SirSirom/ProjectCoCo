@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
  * Class to handle Google Login
  */
 class GoogleLogin {
+  static GoogleSignInAccount? account;
   static const List<String> scopes = <String>[
     'https://www.google.com/calendar/feeds',
     'https://www.googleapis.com/auth/script.scriptapp',
@@ -17,20 +18,19 @@ class GoogleLogin {
       scopes: scopes
   );
 
-  static Future<GoogleSignInAccount?> handleSignIn() async {
+  static Future<void> handleSignIn() async {
     try {
-      return await _googleSignIn.signIn();
+      account = await _googleSignIn.signIn();
     } catch (error) {
       print(error);
     }
     return null;
   }
 
-  static Future<Map<String, String>> getAccessToken(GoogleSignInAccount? account) async {
+  static Future<Map<String, String>> getAuthHeaders() {
     if(account != null) {
-      final auth = await account.authentication;
-      return account.authHeaders;
+      return account!.authHeaders;
     }
-    return {};
+    return Future.value({});
   }
 }
