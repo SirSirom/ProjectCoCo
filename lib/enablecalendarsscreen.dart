@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:project_coco/api/models/CalendarModel.dart';
+
+import 'api/util/ApiHelper.dart';
 
 class EnableCalendarsScreen extends StatefulWidget {
   const EnableCalendarsScreen({super.key});
@@ -9,26 +13,15 @@ class EnableCalendarsScreen extends StatefulWidget {
 
 class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
   // Sample data for calendars
-  final List<Map<String, dynamic>> _calendars = [
-    {'name': 'Calendar 1', 'enabled': false},
-    {'name': 'Calendar 2', 'enabled': true},
-    {'name': 'Calendar 3', 'enabled': false},
-    {'name': 'Calendar 4', 'enabled': true},
-    {'name': 'Calendar 5', 'enabled': false},
-    {'name': 'Calendar 6', 'enabled': false},
-    {'name': 'Calendar 7', 'enabled': true},
-    {'name': 'Calendar 8', 'enabled': false},
-    {'name': 'Calendar 9', 'enabled': true},
-    {'name': 'Calendar 10', 'enabled': false},
-    {'name': 'Calendar 11', 'enabled': true},
-    {'name': 'Calendar 12', 'enabled': false},
-    {'name': 'Calendar 13', 'enabled': true},
-    {'name': 'Calendar 14', 'enabled': false},
-    {'name': 'Calendar 15', 'enabled': true},
-    {'name': 'Calendar 16', 'enabled': false},
-    {'name': 'Calendar 17', 'enabled': true},
-    {'name': 'Calendar 18', 'enabled': false},
-  ];
+  List<CalendarModel> _calendars = [];
+  @override
+  void initState(){
+    super.initState();
+    _loadCalendars().then((_) {
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +58,9 @@ class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
                     itemBuilder: (context, index) {
                       return ListTile(
                         leading: Switch(
-                          value: _calendars[index]['enabled'],
+                          value: _calendars[index].registered,
                           onChanged: (bool newValue) {
-                            setState(() {
-                              _calendars[index]['enabled'] = newValue;
-                            });
+                              _sendNewRegisteredState(newValue,_calendars[index]);
                           },
                           activeColor: Colors.green,
                           inactiveTrackColor: Colors.brown[100],
@@ -77,7 +68,7 @@ class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
                           //TODO: grauen ränder der inaktiven auf brown[100] setzen
                         ),
                         title: Text(
-                          _calendars[index]['name'],
+                          _calendars[index].name,
                           style: const TextStyle(
                               color: Colors.white, fontSize: 18, fontFamily: 'NewComputerModern'),
                         ),
@@ -104,4 +95,23 @@ class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
       ),
     );
   }
+
+  Future<void> _loadCalendars() async {
+    List<CalendarModel> calendars = await ApiHelper.loadCalendars();
+    setState(() {
+      _calendars = calendars;
+    });
+  }
+  Future<void> _sendNewRegisteredState(bool newValue, CalendarModel calendar) async {
+    setState(() {
+      calendar.registered = newValue;
+    });
+    if (newValue) {
+      print((await ApiHelper.enableCalendar(calendar.id)).body);
+    }else{
+      await ApiHelper.disableCalendar(calendar.id);
+    }
+    _loadCalendars();
+  }
 }
+

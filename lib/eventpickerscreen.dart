@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:project_coco/api/Mocks/json_mocks.dart';
+import 'package:collection/collection.dart';
 import 'package:project_coco/api/models/CalendarModel.dart';
 import 'package:project_coco/api/models/EventModel.dart';
 import 'package:project_coco/api/models/PropertyModel.dart';
@@ -17,19 +16,25 @@ class EventPickerScreen extends StatefulWidget {
 
 class _EventPickerScreenState extends State<EventPickerScreen> {
   final TextEditingController _searchController = TextEditingController();
-  late Map<String,PropertyModel> _properties;
-  List<CalendarModel> calendars = CalendarModel.calendarsFromJson(calendarJSON);
-  final List<EventModel> _events = EventModel.eventsFromJson(eventsJSON);
-  DateTime _startDate = DateTime.now();
-  DateTime _endDate = DateTime.now();
-  late List<EventModel> _filteredEvents;
+  Map<String,PropertyModel> _properties = {};
+  List<CalendarModel> _calendars = [];
+  List<EventModel> _events = [];
+  DateTime _startDate = DateTime(2024);
+  DateTime _endDate = DateTime(2026);
+  late List<EventModel> _filteredEvents = [];
 
   @override
   void initState() {
     super.initState();
-    loadproperties();
-    print(_properties);
-    _filteredEvents = _events;
+  _loadProperties().then((_) {
+  });
+  _loadEnabledCalendars().then((_) {
+    _loadEvents(_calendars).then((_) {
+      _filterEvents();
+    });
+  });
+
+
   }
   @override
   void didChangeDependencies(){
@@ -38,10 +43,10 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
 
   void _filterEvents() {
     setState(() {
-      _filteredEvents = _events.where((event) {
+      List<EventModel> noDubs = groupBy(_events, (EventModel event) => event.title).values.map((group) => group.first).toList();
+      _filteredEvents = noDubs.where((event) {
         return event.title.toLowerCase().contains(_searchController.text.toLowerCase());
       }).toList();
-      print(_filteredEvents);
     });
   }
 
@@ -59,6 +64,9 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
         } else {
           _endDate = picked;
         }
+      });
+      _loadEvents(_calendars).then((_) {
+        _filterEvents();
       });
     }
   }
@@ -169,10 +177,9 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
             child: ListView.builder(
               itemCount: _filteredEvents.length,
               itemBuilder: (context, index) {
-                final event = _events[index];
-                final eventProperty = _properties.containsKey(event.title) ? _properties[event.title] : PropertyModel(color: EventColor.NONE, hidden: true);
-
-
+                final event = _filteredEvents[index];
+                final eventTitle = "\"${event.title}\"";
+                final eventProperty = _properties.containsKey(eventTitle) ? _properties[eventTitle] : _properties.putIfAbsent(eventTitle, () => PropertyModel(color: EventColor.NONE, hidden: false));
                 return Column(
                   children: [
                     ListTile(
@@ -207,11 +214,12 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                                     content: SingleChildScrollView(
                                       child: BlockPicker(
                                         pickerColor: eventProperty.color.color,
-                                        availableColors: List<Color>.from(EventColor.values.map((eventColor) => eventColor.color ?? Color(0xFFFFFFFF))),
+                                        availableColors: List<Color>.from(EventColor.values.map((eventColor) => eventColor.color)),
                                         onColorChanged: (Color color) {
                                           setState(() {
                                             eventProperty.color = EventColor.fromColor(color);
                                           });
+                                          _saveProperties();
                                         },
                                       ),
                                     ),
@@ -231,7 +239,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                                 },
                               );
                             },
-                          ),
+                          )
                         ]
                       ),
                       onTap: () {
@@ -250,9 +258,31 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
     );
   }
 
-  void loadproperties() async{
-    Response response = await ApiHelper.sendRequest('', HttpMethod.GET, null);
-    _properties = PropertyModel.propertiesFromJson(response.body);
+  Future<void> _loadProperties() async{
+  Map<String,PropertyModel> properties = await ApiHelper.loadProperties();
+    setState(() {
+      _properties = properties;
+    });
+  }
+  Future<void> _loadEnabledCalendars() async{
+    List<CalendarModel> calendars = await ApiHelper.loadEnabledCalendars();
+    setState(() {
+      _calendars = calendars;
+    });
+  }
+  Future<void> _loadEvents(List<CalendarModel> calendars) async{
+    List<EventModel> events = [];
+    print(_startDate);
+    for (CalendarModel calendar in calendars) {
+      events.addAll(await ApiHelper.loadEvents(calendar.id, startTime: _startDate, endTime: _endDate));
+    }
+    setState(() {
+      _events = events;
+    });
+  }
+  Future<void> _saveProperties() async{
+    await ApiHelper.saveProperties(_properties);
+    _loadProperties();
   }
 }
 

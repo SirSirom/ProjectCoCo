@@ -5,20 +5,20 @@ import 'dart:ui';
 /// Class to import data of google calendars.
 class CalendarModel {
 
-  String? id;
-  String? name;
+  String id;
+  String name;
   String? description;
   Color? color;
   String? timeZone;
-  bool? registered;
+  bool registered;
 
   CalendarModel({
-    this.id,
-    this.name,
+    required this.id,
+    required this.name,
     this.description,
     this.color,
     this.timeZone,
-    this.registered
+    required this.registered
   }
   );
 

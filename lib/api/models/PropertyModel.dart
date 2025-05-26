@@ -12,7 +12,7 @@ class PropertyModel {
   required this.hidden,
   });
 
-  static Map<String, PropertyModel> propertiesFromJson(String str) => Map.from(json.decode(str)).map((k, v) => MapEntry<String, PropertyModel>(k, PropertyModel.fromJson(v)));
+  static Map<String, PropertyModel> propertiesFromJson(String str) => Map.from(json.decode(str)).map((k, v) => MapEntry<String, PropertyModel>('\"$k\"', PropertyModel.fromJson(v)));
 
   factory PropertyModel.fromJson(Map<String, dynamic> jsonMap) => PropertyModel(
     color: EventColor.fromId(int.parse(jsonMap["color"])),
@@ -21,6 +21,6 @@ class PropertyModel {
 
   @override
   String toString() {
-    return "{\"color\": ${color.index}, \"hidden\": $hidden}";
+    return "{\"color\": \"${color.index}\", \"hidden\": $hidden}";
   }
 }

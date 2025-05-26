@@ -100,7 +100,7 @@ enum EventType{
 enum EventColor {
 /// Possible colors for google calendar events
 /// ref https://developers.google.com/apps-script/reference/calendar/event-color?hl=de
-  NONE(id: 0, color: null),
+  NONE(id: 0, color: Color(0xFFFFFFFF)),
   PALE_BLUE(id: 1,  color: Color(0xFFA4BDFC)),
   PALE_GREEN(id: 2,  color: Color(0xFF7AE7BF)),
   MAUVE(id: 3,  color: Color(0xFFBDADFF)),
