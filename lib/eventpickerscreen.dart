@@ -178,7 +178,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
               itemCount: _filteredEvents.length,
               itemBuilder: (context, index) {
                 final event = _filteredEvents[index];
-                final eventTitle = "\"${event.title}\"";
+                final eventTitle = "\"${event.title.replaceAll("\\", "\\\\").replaceAll("\"", "\\\"")}\"";
                 final eventProperty = _properties.containsKey(eventTitle) ? _properties[eventTitle] : _properties.putIfAbsent(eventTitle, () => PropertyModel(color: EventColor.NONE, hidden: false));
                 return Column(
                   children: [
@@ -272,7 +272,6 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
   }
   Future<void> _loadEvents(List<CalendarModel> calendars) async{
     List<EventModel> events = [];
-    print(_startDate);
     for (CalendarModel calendar in calendars) {
       events.addAll(await ApiHelper.loadEvents(calendar.id, startTime: _startDate, endTime: _endDate));
     }
