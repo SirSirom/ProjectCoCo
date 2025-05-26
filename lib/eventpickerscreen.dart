@@ -282,6 +282,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
     for (CalendarModel calendar in calendars) {
       events.addAll(await ApiHelper.loadEvents(calendar.id, startTime: _startDate, endTime: _endDate));
     }
+    events.sort((a, b) => a.title.compareTo(b.title));  //Sort events alphabetically
     setState(() {
       _events = events;
     });
