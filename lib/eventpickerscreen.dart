@@ -195,24 +195,34 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-
-                          //EIN/AUSBLENDEN
-                          IconButton(
-                            icon: Icon(
-                              eventProperty!.hidden
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                eventProperty.hidden = !eventProperty.hidden;
-                              });
-                            },
-                          ),
-
                           //FARBWEAHLER
                           IconButton(
-                            icon: Icon(Icons.color_lens, color: eventProperty.color.color),
+                            icon: Icon(
+                              Icons.color_lens,
+                              color: eventProperty?.color.color,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 1,         // Much smaller blur
+                                  color: Colors.black,
+                                  offset: Offset(1, 1), // Slight incremental offset
+                                ),
+                                Shadow(
+                                  blurRadius: 1,         // Much smaller blur
+                                  color: Colors.black,
+                                  offset: Offset(1, -1), // Slight incremental offset
+                                ),
+                                Shadow(
+                                  blurRadius: 1,         // Much smaller blur
+                                  color: Colors.black,
+                                  offset: Offset(-1, 1), // Slight incremental offset
+                                ),
+                                Shadow(
+                                  blurRadius: 1,         // Much smaller blur
+                                  color: Colors.black,
+                                  offset: Offset(-1, -1), // Slight incremental offset
+                                )
+                              ]
+                            ),
                             onPressed: () {
                               showDialog(
                                 context: context,
@@ -221,28 +231,17 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                                     title: Text("Wähle eine Farbe", style: TextStyle(fontSize: 18, fontFamily: 'NewComputerModern', )),
                                     content: SingleChildScrollView(
                                       child: BlockPicker(
-                                        pickerColor: eventProperty.color.color,
+                                        pickerColor: eventProperty?.color.color,
                                         availableColors: List<Color>.from(EventColor.values.map((eventColor) => eventColor.color)),
                                         onColorChanged: (Color color) {
                                           setState(() {
-                                            eventProperty.color = EventColor.fromColor(color);
+                                            eventProperty?.color = EventColor.fromColor(color);
                                           });
+                                          Navigator.pop(context);
                                           _saveProperties();
                                         },
                                       ),
                                     ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text(
-                                          "OK",
-                                          style: TextStyle(fontSize: 18, fontFamily: 'NewComputerModern', ),
-                                        ),
-                                      ),
-                                    ],
-
                                   );
                                 },
                               );
@@ -251,7 +250,6 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                         ]
                       ),
                       onTap: () {
-                        print('Tapped on ${_filteredEvents[index]}'); //TODO: Event öffnen?
                       },
                     ),
 

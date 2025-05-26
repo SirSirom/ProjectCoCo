@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:project_coco/api/models/CalendarModel.dart';
 
 import 'api/util/ApiHelper.dart';
@@ -91,8 +90,6 @@ class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
             right: 16,
             child: Row(
               children: [
-                TextButton(onPressed: (){ Navigator.pushNamed(context, '/eventpickerscreen'); },
-                    child: const Text("skip", style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'NewComputerModern'))),
                 ElevatedButton(onPressed: (){ Navigator.pushNamed(context, '/eventpickerscreen'); }, style: ElevatedButton.styleFrom(backgroundColor: Colors.brown[100]),
                     child: const Text("continue", style: TextStyle(color: Colors.black, fontSize: 18, fontFamily: 'NewComputerModern')))
               ],
