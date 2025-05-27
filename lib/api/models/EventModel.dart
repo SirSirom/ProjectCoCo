@@ -30,7 +30,7 @@ class EventModel {
 
   factory EventModel.fromJson(Map<String, dynamic> jsonMap){
 
-    // Convert Map<String, dynamic> to Map<String, String>
+    // Convert Map<String, dynamic> to EventModel object
     return EventModel(
         id: jsonMap["id"] as String,
         title: jsonMap["title"] as String,
@@ -45,8 +45,9 @@ class EventModel {
         tags: List<String>.from(jsonMap["tags"]),
     );}
 
-
+  //for calendarID/Events Endpoint
   static List<EventModel> eventsFromJson(String str) => List<EventModel>.from(json.decode(str).map((x) => EventModel.fromJson(x)));
+
   @override
   String toString() {
     return '''{
@@ -66,6 +67,8 @@ class EventModel {
 }
 
 enum EventTransparency{
+/// Possible transparency for google calendar events
+/// ref https://developers.google.com/apps-script/reference/calendar/event-transparency?hl=de
   OPAQUE,
   TRANSPARENT;
 
@@ -80,6 +83,8 @@ enum EventTransparency{
 }
 
 enum EventType{
+/// Possible event types for google calendar events
+/// ref https://developers.google.com/apps-script/reference/calendar/event-type?hl=de
   DEFAULT,
   BIRTHDAY,
   FOCUS_TIME,

@@ -16,6 +16,7 @@ class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
   @override
   void initState(){
     super.initState();
+    ///load calendars on init
     _loadCalendars().then((_) {
     });
   }
@@ -101,12 +102,15 @@ class _EnableCalendarsScreenState extends State<EnableCalendarsScreen> {
   }
 
   Future<void> _loadCalendars() async {
+    ///Load calendars from API and setState after
     List<CalendarModel> calendars = await ApiHelper.loadCalendars();
     setState(() {
       _calendars = calendars;
     });
   }
   Future<void> _sendNewRegisteredState(bool newValue, CalendarModel calendar) async {
+    ///send new registered state from API and reload calendars after
+    ///reload will trigger new setState
     setState(() {
       calendar.registered = newValue;
     });

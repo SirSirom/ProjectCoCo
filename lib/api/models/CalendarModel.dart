@@ -21,18 +21,17 @@ class CalendarModel {
     required this.registered
   }
   );
-
   static List<CalendarModel> calendarsFromJson(String str) => List<CalendarModel>.from(json.decode(str).map((x) => CalendarModel.fromJson(x)));
-  
+  ///for /Calendar Enpoint
 
   factory CalendarModel.fromJson(Map<String, dynamic> jsonMap){
 
-    // Convert Map<String, dynamic> to Map<String, String>
+    /// Convert Map<String, dynamic> to CalenderModel object
     return CalendarModel(
       id: jsonMap["id"] as String,
       name: jsonMap["name"] as String,
       description: jsonMap["description"] as String,
-      color: Color(int.parse('0xFF${(jsonMap["color"] as String).substring(1)}')),
+      color: Color(int.parse('0xFF${(jsonMap["color"] as String).substring(1)}')), // Convert hex string '#FFFFFF' to Color object with format 0xAARRGGBB
       timeZone: jsonMap["timeZone"] as String,
       registered: jsonMap["registered"] as bool
     );

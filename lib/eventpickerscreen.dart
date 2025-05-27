@@ -27,33 +27,37 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
   @override
   void initState() {
     super.initState();
-  _loadProperties().then((_) {
-  });
-  _loadEnabledCalendars().then((_) {
-    _loadEvents(_calendars).then((_) {
-      _filterEvents();
+    ///load properties on init
+    _loadProperties().then((_) {
     });
-  });
-
-
+    ///load calendars on init
+    _loadEnabledCalendars().then((_) {
+      ///after loading calendars, load events
+      _loadEvents(_calendars).then((_) {
+        ///finally filter events
+        _filterEvents();
+      });
+    });
   }
   @override
   void didChangeDependencies(){
     super.didChangeDependencies();
   }
 
-  //filtert die events nach dem suchfeld mit contains
   void _filterEvents() {
+  ///filtert die events nach dem suchfeld mit contains
+    List<EventModel> noDubs = groupBy(_events, (EventModel event) => event.title).values.map((group) => group.first).toList();
+    _filteredEvents = noDubs.where((event) {
+      return event.title.toLowerCase().contains(_searchController.text.toLowerCase());
+    }).toList();
     setState(() {
-      List<EventModel> noDubs = groupBy(_events, (EventModel event) => event.title).values.map((group) => group.first).toList();
-      _filteredEvents = noDubs.where((event) {
-        return event.title.toLowerCase().contains(_searchController.text.toLowerCase());
-      }).toList();
+      _filteredEvents.sort((a, b) => a.title.compareTo(b.title));
     });
   }
 
   //date-picker dialogfenster
   Future<void> _selectDate(BuildContext context, bool isStart) async {
+    ///selects a date from the date-picker dialog
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: isStart ? _startDate : _endDate,
@@ -68,6 +72,7 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
           _endDate = picked;
         }
       });
+      ///reload events after date selection with new dates as URL parameters
       _loadEvents(_calendars).then((_) {
         _filterEvents();
       });
@@ -234,9 +239,11 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                                         pickerColor: eventProperty?.color.color,
                                         availableColors: List<Color>.from(EventColor.values.map((eventColor) => eventColor.color)),
                                         onColorChanged: (Color color) {
+                                          ///change color of event
                                           setState(() {
                                             eventProperty?.color = EventColor.fromColor(color);
                                           });
+                                          ///close dialog and save properties
                                           Navigator.pop(context);
                                           _saveProperties();
                                         },
@@ -252,7 +259,6 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                       onTap: () {
                       },
                     ),
-
                   ],
                 );
               },
@@ -264,28 +270,32 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
   }
 
   Future<void> _loadProperties() async{
-  Map<String,PropertyModel> properties = await ApiHelper.loadProperties();
+    ///load properties from API and setState after
+    Map<String,PropertyModel> properties = await ApiHelper.loadProperties();
     setState(() {
       _properties = properties;
     });
   }
   Future<void> _loadEnabledCalendars() async{
+    ///load enabled calendars from API and setState after
     List<CalendarModel> calendars = await ApiHelper.loadEnabledCalendars();
     setState(() {
       _calendars = calendars;
     });
   }
   Future<void> _loadEvents(List<CalendarModel> calendars) async{
+    ///load events from calendar list from API and setState after
     List<EventModel> events = [];
     for (CalendarModel calendar in calendars) {
       events.addAll(await ApiHelper.loadEvents(calendar.id, startTime: _startDate, endTime: _endDate));
     }
-    events.sort((a, b) => a.title.compareTo(b.title));  //Sort events alphabetically
     setState(() {
       _events = events;
     });
   }
   Future<void> _saveProperties() async{
+    ///save properties to API and reload properties after
+    ///reloading will trigger new setState
     await ApiHelper.saveProperties(_properties);
     _loadProperties();
   }
