@@ -200,6 +200,16 @@ class _EventPickerScreenState extends State<EventPickerScreen> {
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          IconButton(
+                              icon: Icon(
+                                eventProperty?.hidden ?? false ?  Icons.visibility_off : Icons.visibility
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  eventProperty?.hidden = !(eventProperty.hidden);
+                                });
+                                  _saveProperties();
+                              },),
                           //FARBWEAHLER
                           IconButton(
                             icon: Icon(
